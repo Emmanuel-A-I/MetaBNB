@@ -171,8 +171,31 @@ let likedPlaces = JSON.parse(localStorage.getItem('likedPlaces')) || [];
 // DOM Elements
 let sections = document.querySelectorAll('section');
 
-// Initialize when DOM is loaded
+// ===== MOBILE MENU INTEGRATION =====
 document.addEventListener('DOMContentLoaded', function() {
+    // Listen for mobile filter events
+    window.addEventListener('mobileFilter', function(e) {
+        const filterType = e.detail.filterType;
+        filterByType(filterType);
+    });
+    
+    // Ensure mobile Connect Wallet button works
+    const connectWalletMobile = document.getElementById('connectWalletMobile');
+    if (connectWalletMobile) {
+        // Remove any existing listeners and add fresh one
+        const newBtn = connectWalletMobile.cloneNode(true);
+        connectWalletMobile.parentNode.replaceChild(newBtn, connectWalletMobile);
+        
+        newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openWalletModal();
+            if (typeof closeMobileMenu === 'function') {
+                closeMobileMenu();
+            }
+        });
+    }
+    
+    // Initialize page content and event listeners
     initializePage();
     setupEventListeners();
     
@@ -206,14 +229,18 @@ function initializePage() {
 
 // Setup event listeners
 function setupEventListeners() {
-    // Connect Wallet button
-    const connectWalletBtn = document.querySelector('.active');
-    if (connectWalletBtn) {
-        connectWalletBtn.addEventListener('click', function(e) {
+    // Connect Wallet buttons - both desktop and mobile
+    const connectWalletBtns = document.querySelectorAll('.active');
+    connectWalletBtns.forEach(btn => {
+        // Remove any existing listeners
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
+        newBtn.addEventListener('click', function(e) {
             e.preventDefault();
             openWalletModal();
         });
-    }
+    });
     
     // Search functionality (homepage)
     const searchBtn = document.querySelector('.btn');
@@ -239,18 +266,26 @@ function setupEventListeners() {
 
 // Setup location filter for place.html
 function setupLocationFilter() {
-    const locationFilter = document.querySelector('.active2');
-    if (locationFilter) {
-        locationFilter.addEventListener('click', function(e) {
+    const locationFilters = document.querySelectorAll('.active2');
+    locationFilters.forEach(filter => {
+        // Remove any existing listeners
+        const newFilter = filter.cloneNode(true);
+        filter.parentNode.replaceChild(newFilter, filter);
+        
+        newFilter.addEventListener('click', function(e) {
             e.preventDefault();
             openLocationFilterModal();
         });
-    }
+    });
     
     // Also add click listeners to filter buttons in nav
     const filterButtons = document.querySelectorAll('.nav2 a');
     filterButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
+        // Remove any existing listeners
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', function(e) {
             e.preventDefault();
             const filterType = this.textContent.trim();
             filterByType(filterType);
@@ -292,7 +327,7 @@ function createPlaceCard(place) {
     box.dataset.id = place.id;
     box.dataset.type = place.type;
     
-    // Create heart icon
+    // Create heart icon - FIXED: Use red.png for liked hearts
     const heart = document.createElement('img');
     heart.src = place.liked ? 'assets/red.png' : 'assets/heart.png';
     heart.alt = 'Like';
@@ -431,7 +466,7 @@ function openWalletModal() {
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 2000;
     `;
     
     // Create modal content
@@ -471,12 +506,12 @@ function openWalletModal() {
             alert(`Wallet connected!\nAddress: ${walletAddress}\n(connected to cowrywise wallet address.)`);
             document.body.removeChild(modalOverlay);
             
-            // Update button text
-            const connectBtn = document.querySelector('.active');
-            if (connectBtn) {
-                connectBtn.textContent = 'Connected';
-                connectBtn.style.backgroundColor = '#4CAF50';
-            }
+            // Update button text on ALL Connect Wallet buttons
+            const connectBtns = document.querySelectorAll('.active');
+            connectBtns.forEach(btn => {
+                btn.textContent = 'Connected';
+                btn.style.backgroundColor = '#4CAF50';
+            });
         } else {
             alert('Please enter a wallet address');
         }
@@ -509,7 +544,7 @@ function openLocationFilterModal() {
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 2000;
     `;
     
     // Create modal content
@@ -536,6 +571,9 @@ function openLocationFilterModal() {
             <button class="filter-option" data-type="Castle">Castle</button>
             <button class="filter-option" data-type="Cottage">Cottage</button>
             <button class="filter-option" data-type="Farm">Farm</button>
+            <button class="filter-option" data-type="fantast city">Fantast City</button>
+            <button class="filter-option" data-type="Carbins">Carbins</button>
+            <button class="filter-option" data-type="Off-grid">Off-grid</button>
         </div>
         <button id="closeFilterBtn" style="width: 100%; padding: 12px; background: #666; color: white; border: none; border-radius: 5px; cursor: pointer;">
             Close
@@ -611,28 +649,33 @@ function openLocationFilterModal() {
 function attachLikeButtonListeners() {
     const heartIcons = document.querySelectorAll('.heart');
     heartIcons.forEach(heart => {
-        heart.addEventListener('click', function() {
+        // Remove any existing listeners
+        const newHeart = heart.cloneNode(true);
+        heart.parentNode.replaceChild(newHeart, heart);
+        
+        newHeart.addEventListener('click', function() {
             const placeId = parseInt(this.dataset.id);
             toggleLike(placeId, this);
         });
     });
 }
 
-// Toggle like status
+// Toggle like status - FIXED: Immediately update heart icon
 function toggleLike(placeId, heartElement) {
     const placeIndex = mockPlaces.findIndex(p => p.id === placeId);
     
     if (placeIndex !== -1) {
+        // Toggle the liked status
         mockPlaces[placeIndex].liked = !mockPlaces[placeIndex].liked;
         
-        // Update UI
+        // IMMEDIATELY update the heart icon
         if (mockPlaces[placeIndex].liked) {
-            heartElement.src = 'assets/heart-filled.png';
+            heartElement.src = 'assets/red.png'; // Red heart for liked
             if (!likedPlaces.includes(placeId)) {
                 likedPlaces.push(placeId);
             }
         } else {
-            heartElement.src = 'assets/heart.png';
+            heartElement.src = 'assets/heart.png'; // Regular heart for unliked
             likedPlaces = likedPlaces.filter(id => id !== placeId);
         }
         
@@ -644,6 +687,12 @@ function toggleLike(placeId, heartElement) {
         if (currentPlaceIndex !== -1) {
             currentPlaces[currentPlaceIndex].liked = mockPlaces[placeIndex].liked;
         }
+        
+        // Add a visual feedback animation
+        heartElement.style.transform = 'scale(1.3)';
+        setTimeout(() => {
+            heartElement.style.transform = 'scale(1)';
+        }, 200);
     }
 }
 
@@ -689,6 +738,13 @@ const modalStyles = `
     
     .heart:hover {
         transform: scale(1.2);
+    }
+    
+    /* Mobile menu styles */
+    @media (max-width: 768px) {
+        .modal-overlay, .filter-modal-overlay {
+            z-index: 2000 !important;
+        }
     }
 `;
 
