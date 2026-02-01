@@ -6,522 +6,809 @@
     <title>Place to stay</title>
     <link rel="stylesheet" href="media.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
+    <style>
+        /* Mobile menu styles */
+        .log .menu {
+            display: none;
+        }
+        
+        .mobile-nav {
+            display: none;
+        }
+        
+        .menu-overlay {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            /* Hide desktop navigation but keep location button */
+            .nav-bar nav, 
+            .nav-bar .active {
+                display: none !important;
+            }
+            
+            /* Show mobile menu icon */
+            .log .menu {
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                display: inline-block;
+            }
+            
+            /* Logo adjustments */
+            .log {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px;
+                position: relative;
+                z-index: 100;
+            }
+            
+            /* Adjust nav2 for mobile - keep location button visible */
+            .nav2 {
+                display: flex !important;
+                justify-content: flex-end;
+                padding: 10px 15px;
+                background: #f8f8f8;
+                margin-top: 0;
+            }
+            
+            .nav2 nav {
+                display: none !important;
+            }
+            
+            .nav2 .active2 {
+                display: block !important;
+                width: auto;
+            }
+            
+            /* Menu Overlay */
+            .menu-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 998;
+            }
+            
+            /* Mobile Navigation Sidebar */
+            .mobile-nav {
+                display: block;
+                position: fixed;
+                top: 0;
+                right: -300px;
+                width: 250px;
+                height: 100vh;
+             
+            background-color: rgba(0, 0, 0, 0.668);
+                color: #fff;
+                padding: 30px 20px;
+                font-size: 18px;
+                z-index: 999;
+                transition: right 0.3s ease-in-out;
+                overflow-y: auto;
+            }
+            
+            .mobile-nav.active {
+                right: 0;
+            }
+            
+            .mobile-nav ul {
+                list-style: none;
+                padding: 0;
+                margin: 40px 0 20px 0;
+            }
+            
+            .mobile-nav ul a {
+                display: block;
+                color: #fff;
+                text-decoration: none;
+                padding: 15px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                transition: color 0.3s;
+            }
+            
+            .mobile-nav ul a:hover {
+                color: #A02279;
+            }
+            
+            /* Filter categories in mobile menu */
+            .filter-categories {
+                margin: 20px 0;
+                padding: 15px 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .filter-categories h4 {
+                color: #A02279;
+                margin-bottom: 15px;
+                font-size: 16px;
+            }
+            
+            .filter-categories a {
+                display: block;
+                color: #fff;
+                text-decoration: none;
+                padding: 10px 0;
+                font-size: 16px;
+                transition: color 0.3s;
+            }
+            
+            .filter-categories a:hover {
+                color: #A02279;
+            }
+            
+            /* Connect Wallet button in mobile menu */
+            .mobile-nav .active {
+                display: block;
+                width: 100%;
+                background-color: #A02279;
+                color: white;
+                padding: 15px;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 8px;
+                margin-top: 20px;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            
+            .mobile-nav .active:hover {
+                background-color: #8a1e68;
+            }
+            
+            /* Close button */
+            .close-menu {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 28px;
+                cursor: pointer;
+                z-index: 1000;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: background-color 0.3s;
+            }
+            
+            .close-menu:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+            
+            /* Adjust section layout for mobile */
+            section {
+                padding: 15px;
+            }
+            
+            .box {
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* Additional mobile styles for better layout */
+        @media (max-width: 480px) {
+            .log img:first-child {
+                width: 30px;
+            }
+            
+            .log img:nth-child(2) {
+                width: 120px;
+            }
+            
+            .mobile-nav {
+                width: 85%;
+                max-width: 280px;
+            }
+            
+            .nav2 {
+                padding: 8px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-
+    <!-- Main Navigation -->
     <div class="nav-bar">
-        <div class="logo">
-            <img src="assets/Vector.png" alt="">
-            <img src="assets/Vector (1).png" alt="">
+        <div class="logo log">
+            <img src="assets/Vector.png" alt="Meta BNB Logo">
+            <img src="assets/Vector (1).png" alt="Meta BNB">
+            <img class="menu" src="assets/menu.png" alt="Menu" id="menuToggle">
         </div>
-           <nav>
-              <ul>
-                 <a href="index.html"> <li>Home</li></a>
-                 <a href="#"><li>Place to stay</li></a>
-                 <a href="#"><li>NFT</li></a>
-                 <a href="#">Community</a>
-              </ul>
+        
+        <nav>
+            <ul>
+                <a href="index.html"><li>Home</li></a>
+                <a href="#"><li>Place to stay</li></a>
+                <a href="#"><li>NFT</li></a>
+                <a href="#"><li>Community</li></a>
+            </ul>
+        </nav>
+        
+        <a href="#" class="active" id="connectWalletDesktop">Connect Wallet</a>
+    </div>
 
-
-
-           </nav>
-
-                 <a href="#" class="active">Connect Wallet</a>
-    
-
-
-
-</div>
-
+    <!-- Filter Navigation - Location button remains visible on mobile -->
     <div class="nav-bar nav2">
-       
-           <nav>
-              <ul>
-                 <a href="index.html"> <li>Resturant</li></a>
-                 <a href="#"><li>Cottage</li></a>
-                 <a href="#"><li>Castle</li></a>
-                 <a href="#"><li>fantast city</li></a>
-                 <a href="#"> <li>beach</li></a>
-                 <a href="#"><li>Carbins</li></a>
-                 <a href="#"><li>Off-grid</li></a>
-         <a href="#"><li>Farm</li></a>
-              </ul>
+        <nav>
+            <ul>
+                <a href="index.html"><li>Resturant</li></a>
+                <a href="#"><li>Cottage</li></a>
+                <a href="#"><li>Castle</li></a>
+                <a href="#"><li>fantast city</li></a>
+                <a href="#"><li>beach</li></a>
+                <a href="#"><li>Carbins</li></a>
+                <a href="#"><li>Off-grid</li></a>
+                <a href="#"><li>Farm</li></a>
+            </ul>
+        </nav>
+        
+        <a href="#" class="active2" id="locationFilterDesktop">Location <img src="assets/set.png" alt="Filter"></a>
+    </div>
 
-
-
-           </nav>
-
-                 <a href="#" class="active2">Location <img src="assets/set.png" alt=""></a>
+    <!-- Mobile Menu Overlay -->
+    <div class="menu-overlay" id="menuOverlay"></div>
     
-
-
-
-</div>
-
-
-<section>
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box1.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <button class="close-menu" id="closeMenu">×</button>
+        
+        <!-- Main Navigation Links -->
+        <ul>
+            <a href="index.html"><li>Home</li></a>
+            <a href="#"><li>Place to stay</li></a>
+            <a href="#"><li>NFT</li></a>
+            <a href="#"><li>Community</li></a>
+        </ul>
+        
+        <!-- Filter Categories -->
+        <div class="filter-categories">
+            <h4>Filter by Type</h4>
+            <a href="#" data-filter="Resturant">Resturant</a>
+            <a href="#" data-filter="Cottage">Cottage</a>
+            <a href="#" data-filter="Castle">Castle</a>
+            <a href="#" data-filter="fantast city">Fantast City</a>
+            <a href="#" data-filter="beach">Beach</a>
+            <a href="#" data-filter="Carbins">Carbins</a>
+            <a href="#" data-filter="Off-grid">Off-grid</a>
+            <a href="#" data-filter="Farm">Farm</a>
         </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
+        
+        <!-- Action Buttons -->
+        <a href="#" class="active" id="connectWalletMobile">Connect Wallet</a>
     </div>
 
-   <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box2.png" alt="" class="pix">
+    <!-- Content Sections -->
+    <section>
+        <!-- Box 1 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box1.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
+        
+        <!-- Box 2 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box2.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
+        
+        <!-- Box 3 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box3.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
 
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
+        <!-- Box 4 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box4.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
             </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
             </div>
         </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
 
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box3.png" alt="" class="pix">
+        <!-- Box 5 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box5.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
 
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
+        <!-- Box 6 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box6.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
             </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
             </div>
         </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
 
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box4.png" alt="" class="pix">
+        <!-- Box 7 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box7.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
 
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
+        <!-- Box 8 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box8.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
             </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
             </div>
         </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
+    </section>
 
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box5.png" alt="" class="pix">
+    <section>
+        <!-- Box 9 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box9.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
 
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
+        <!-- Box 10 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box10.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
             </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
             </div>
         </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
 
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box6.png" alt="" class="pix">
+        <!-- Box 11 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box11.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
 
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
+        <!-- Box 12 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box12.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
             </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
             </div>
         </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
 
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box7.png" alt="" class="pix">
+        <!-- Box 13 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box13.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
 
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
+        <!-- Box 14 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box14.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
             </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
             </div>
         </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
 
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box8.png" alt="" class="pix">
+        <!-- Box 15 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box15.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
+            </div>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+            </div>
+        </div>
 
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
+        <!-- Box 16 -->
+        <div class="box">
+            <img src="assets/heart.png" alt="" class="heart">
+            <img src="assets/box16.png" alt="" class="pix">
+            <div class="box-text">
+                <div class="box-text flex">
+                    <span>Desert king</span>
+                    <h4>1MBT per night</h4>
+                </div>
+                <div class="box-text flex">
+                    <span>2345km away</span>
+                    <span>available for 2weeks stay</span>
+                </div>
             </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
+            <div class="star">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
+                <img src="assets/star.png" alt="">
             </div>
         </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
+    </section>
+
+    <footer>
+        <div class="footer">
+            <div class="logo">
+                <img src="assets/footer-house.png" class="house" alt="">
+                <img src="assets/footer.png" alt="">
+                <div class="social">
+                    <img src="assets/facebook-263-721950.png" alt="">
+                    <img src="assets/instagram-216-721958.png" alt="">
+                    <img src="assets/twitter-241-721979.png" alt="">
+                </div>
+                <div class="cc">
+                    <img src="assets/cc.png" alt="">
+                    <span>2022 Metabnb</span>
+                </div>
+            </div>
+            <div class="community foot">
+                <a href="#"><h3>Community</h3></a>
+                <a href="#"><li>NFT</li></a>
+                <a href="#"><li>Token</li></a>
+                <a href="#"><li>Landlord</li></a>
+                <a href="#"><li>Discord</li></a>
+            </div>
+            <div class="places foot">
+                <a href="#"><h3>Places</h3></a>
+                <a href="#"><li>Castle</li></a>
+                <a href="#"><li>Farms</li></a>
+                <a href="#"><li>Beach</li></a>
+                <a href="#"><li>Learn More</li></a>
+            </div>
+            <div class="about foot">
+                <a href="#"><h3>About us</h3></a>
+                <a href="#"><li>road Map</li></a>
+                <a href="#"><li>Creators</li></a>
+                <a href="#"><li>Careers</li></a>
+                <a hef="#"><li>Contact us</li></a>
+            </div>
         </div>
-    </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality only - let script.js handle the rest
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        // Open mobile menu
+        menuToggle.addEventListener('click', function() {
+            mobileNav.classList.add('active');
+            menuOverlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close mobile menu
+        function closeMobileMenu() {
+            mobileNav.classList.remove('active');
+            menuOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        closeMenu.addEventListener('click', closeMobileMenu);
+        menuOverlay.addEventListener('click', closeMobileMenu);
+        
+        // Close menu when clicking on a link
+        const mobileLinks = mobileNav.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!this.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
+        });
+        
+        // Add filter functionality to filter categories in mobile menu
+        const filterLinks = document.querySelectorAll('.filter-categories a[data-filter]');
+        filterLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const filterType = this.getAttribute('data-filter');
+                
+                // Close mobile menu first
+                closeMobileMenu();
+                
+                // Let script.js handle the filtering
+                // The event listener will be added by script.js
+            });
+        });
+        
+        // Wait for script.js to load and then add event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if script.js functions are available
+            setTimeout(() => {
+                // Add filter functionality if script.js is loaded
+                filterLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const filterType = this.getAttribute('data-filter');
+                        
+                        // Use the existing filterByType function from script.js
+                        if (typeof filterByType === 'function') {
+                            filterByType(filterType);
+                        }
+                    });
+                });
+                
+                // Ensure mobile Connect Wallet button works
+                const connectWalletMobile = document.getElementById('connectWalletMobile');
+                if (connectWalletMobile && typeof openWalletModal === 'function') {
+                    connectWalletMobile.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        openWalletModal();
+                        closeMobileMenu();
+                    });
+                }
+                
+                // Ensure desktop Connect Wallet button works
+                const connectWalletDesktop = document.getElementById('connectWalletDesktop');
+                if (connectWalletDesktop && typeof openWalletModal === 'function') {
+                    // Remove any existing listener and add the correct one
+                    const newDesktopBtn = connectWalletDesktop.cloneNode(true);
+                    connectWalletDesktop.parentNode.replaceChild(newDesktopBtn, connectWalletDesktop);
+                    
+                    newDesktopBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        openWalletModal();
+                    });
+                }
+                
+                // Ensure location filter button works
+                const locationFilterDesktop = document.getElementById('locationFilterDesktop');
+                if (locationFilterDesktop && typeof openLocationFilterModal === 'function') {
+                    // Remove any existing listener and add the correct one
+                    const newLocationBtn = locationFilterDesktop.cloneNode(true);
+                    locationFilterDesktop.parentNode.replaceChild(newLocationBtn, locationFilterDesktop);
+                    
+                    newLocationBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        openLocationFilterModal();
+                    });
+                }
+            }, 100); // Small delay to ensure script.js is loaded
+        });
+    </script>
     
-</section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<section>
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box9.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
-        </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
-
-   <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box10.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
-        </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
-
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box11.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
-        </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
-
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box12.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
-        </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
-
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box13.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
-        </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
-
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box14.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
-        </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
-
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box15.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
-        </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
-
-    <div class="box">
-        <img src="assets/heart.png" alt="" class="heart">
-        <img src="assets/box16.png" alt="" class="pix">
-
-        <div class="box-text">
-            <div class="box-text flex">
-                <span>Desert king</span>
-                <h4>1MBT per night</h4>
-            </div>
-            <div class="box-text flex">
-                <span>2345km away</span>
-                <span>available for 2weeks stay</span>
-            </div>
-        </div>
-        <div class="star">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-            <img src="assets/star.png" alt="">
-        </div>
-    </div>
-    
-</section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<footer>
-    <div class="footer">
-        <div class="logo">
-            <img src="assets/footer-house.png" class="house" alt="">
-            <img src="assets/footer.png" alt="">
-<div class="social">
-    <img src="assets/facebook-263-721950.png" alt="">
-    <img src="assets/instagram-216-721958.png" alt="">
-    <img src="assets/twitter-241-721979.png" alt="">
-</div>
-<div class="cc">
-    <img src="assets/cc.png" alt="">
-    <span>2022 Metabnb</span>
-</div>
-        </div>
-<div class="community foot">
-    <a href="#"><h3>Community</h3></a>
-    <a href="#"><li>NFT</li></a>
-    <a href="#"><li>Token</li></a>
-    <a href="#"><li>Landlord</li></a>
-    <a href="#"><li>Discord</li></a>
-</div>
-<div class="places foot">
-    <a href="#"><h3>Places</h3></a> 
-    <a href="#"><li>Castle</li></a> 
-    <a href="#"><li>Farms</li></a> 
-    <a href="#"><li>Beach</li></a> 
-    <a href="#"><li>Learn More</li></a> 
-</div>
-<div class="about foot">
-    <a href="#"><h3>About us</h3></a>
-    <a href="#"><li>road Map</li></a>
-    <a href="#"><li>Creators </li></a>
-    <a href="#"><li>Careers </li></a>
-    <a hef="#"><li>Contact us </li></a>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </div>
-</footer>
-
-
-
-
-
-
-
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
